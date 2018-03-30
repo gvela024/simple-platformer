@@ -1,0 +1,10 @@
+local src = {
+  './src/?.lua'
+}
+
+return {
+  default = {
+    lpath = table.concat(src, ';'),
+    ROOT = { './spec' }
+  }
+}
