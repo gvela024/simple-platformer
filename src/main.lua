@@ -30,6 +30,7 @@ end
 
 function love.update(dt)
   if love.keyboard.isDown('d') then
+    print(dt)
     if not colliding_with_anything(dude, collision.right, platforms) then
       dude.x = dude.x + dude.speed
     end
