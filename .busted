@@ -1,5 +1,6 @@
 local src = {
-  './src/?.lua'
+  './src/?.lua',
+  './lib/?/?.lua'
 }
 
 return {

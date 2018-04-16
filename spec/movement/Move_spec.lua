@@ -1,4 +1,7 @@
 describe('move', function()
+  local mach = require 'mach'
+  local 
+
   local move = require 'movement.Move'
 
   local dude = { }
@@ -27,15 +30,15 @@ describe('move', function()
     assert.equal(default_x - (delta_time * default_x), dude.x)
   end)
 
-  -- it('should align moving object with stationary if they overlap while moving right', function()
-  --   local wall = {
-  --     x = default_x + (delta_time * default_x) - 1,
-  --     y = default_y,
-  --     height = 30,
-  --     width = 5
-  --   }
-  --   dude.x =
-  --   move.right(dude, wall, delta_time)
-  --   assert
-  -- end)
+  it('should align moving object with stationary if they overlap while moving right', function()
+    local wall = {
+      x = default_x + (delta_time * default_x) - 1,
+      y = default_y,
+      height = 30,
+      width = 5
+    }
+    dude.x =
+    move.right(dude, wall, delta_time)
+    assert
+  end)
 end)
