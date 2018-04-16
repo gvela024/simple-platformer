@@ -1,8 +1,11 @@
 describe('move', function()
   local mach = require 'mach'
-  local 
+  local collision = mach.mock_table({
+    right = function() end,
+    left = function() end
+  }, 'collision')
 
-  local move = require 'movement.Move'
+  local move = require 'movement.Move'(collision)
 
   local dude = { }
   local default_x = 5
@@ -30,15 +33,23 @@ describe('move', function()
     assert.equal(default_x - (delta_time * default_x), dude.x)
   end)
 
-  it('should align moving object with stationary if they overlap while moving right', function()
-    local wall = {
-      x = default_x + (delta_time * default_x) - 1,
-      y = default_y,
-      height = 30,
-      width = 5
-    }
-    dude.x =
-    move.right(dude, wall, delta_time)
-    assert
+  it('should not move right if colliding with one object', function()
+    local stationary_object = { 'this is a stationary object' }
+    collision.right:should_be_called_with(dude, stationary_object[1]):and_will_return(true):when(function()
+      move.right(dude, stationary_object, delta_time)
+    end)
+    assert.equal(default_x, dude.x)
   end)
+
+  -- it('should align moving object with stationary if they overlap while moving right', function()
+  --   local wall = {
+  --     x = default_x + (delta_time * default_x) - 1,
+  --     y = default_y,
+  --     height = 30,
+  --     width = 5
+  --   }
+  --   dude.x =
+  --   move.right(dude, wall, delta_time)
+  --   assert
+  -- end)
 end)
