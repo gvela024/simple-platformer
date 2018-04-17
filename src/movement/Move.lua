@@ -19,7 +19,7 @@ return function(collide)
         if not colliding then
           moving.x = moving.x + (moving.x * delta_time)
         else
-          moving.x = object.x
+          moving.x = object.x - moving.width
         end
       else
         moving.x = moving.x + (moving.x * delta_time)
@@ -31,7 +31,7 @@ return function(collide)
         if not colliding then
           moving.x = moving.x - (moving.x * delta_time)
         else
-          moving.x = object.x 
+          moving.x = object.x + object.width
         end
       else
         moving.x = moving.x - (moving.x * delta_time)

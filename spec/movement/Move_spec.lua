@@ -9,14 +9,15 @@ describe('move', function()
 
   local dude = { }
   local default_x = 5
-  local default_y = 12
+  -- local default_y = 12
   local default_speed = 10
-  local default_height = 20
-  local defatul_width = 20
+  -- local default_height = 20
+  local default_width = 20
   local delta_time = 1
 
   before_each(function()
     dude.x = default_x
+    dude.width = default_width
   end)
 
   it('should move right without any stationary objects', function()
@@ -53,20 +54,46 @@ describe('move', function()
       assert.equal(default_x - (delta_time * default_x), dude.x)
   end)
 
+  it('should align moving object with stationary if they overlap while moving right', function()
+    local stationary = {
+      { x = 17 },
+      { x = 13 }
+    }
+    collision.right:may_be_called_with(dude, stationary[1]):and_will_return(true):
+      and_also(collision.right:may_be_called_with(dude, stationary[2]):and_will_return(false)):
+      when(function()
+        move.right(dude, stationary, delta_time)
+      end)
+    assert.equal(stationary[1].x - default_width, dude.x)
+  end)
+
+  it('should align moving object with stationary if they overlap while moving left', function()
+    local stationary = {
+      { x = 17, width = default_width },
+      { x = 13, width = default_width }
+    }
+    collision.left:may_be_called_with(dude, stationary[1]):and_will_return(false):
+      and_also(collision.left:may_be_called_with(dude, stationary[2]):and_will_return(true)):
+      when(function()
+        move.left(dude, stationary, delta_time)
+      end)
+    assert.equal(stationary[2].x + default_width, dude.x)
+  end)
+
   it('should not move right if colliding with one object', function()
-    local stationary = { { x = default_x } }
+    local stationary = { { x = default_x, width = default_width } }
     collision.right:should_be_called_with(dude, stationary[1]):and_will_return(true):when(function()
       move.right(dude, stationary, delta_time)
     end)
-    assert.equal(default_x, dude.x)
+    assert.equal(default_x - default_width, dude.x)
   end)
 
   it('should not move left if colliding with one object', function()
-    local stationary = { { x = default_x } }
+    local stationary = { { x = default_x, width = default_width } }
     collision.left:should_be_called_with(dude, stationary[1]):and_will_return(true):when(function()
       move.left(dude, stationary, delta_time)
     end)
-    assert.equal(default_x, dude.x)
+    assert.equal(default_x + default_width, dude.x)
   end)
 
   it('should not move right if colliding with one of many objects', function()
@@ -78,11 +105,16 @@ describe('move', function()
       when(function()
         move.right(dude, stationary, delta_time)
       end)
-    assert.equal(default_x, dude.x)
+    assert.equal(default_x - default_width, dude.x)
   end)
 
   it('should not move left if colliding with one of many objects', function()
-    local stationary = { { x = default_x }, { x = default_x }, { x = default_x }, { x = default_x } }
+    local stationary = {
+      { x = default_x, width = default_width },
+      { x = default_x, width = default_width },
+      { x = default_x, width = default_width },
+      { x = default_x, width = default_width }
+    }
     collision.left:may_be_called_with(dude, stationary[1]):and_will_return(false):
       and_also(collision.left:may_be_called_with(dude, stationary[2]):and_will_return(false)):
       and_also(collision.left:may_be_called_with(dude, stationary[3]):and_will_return(true)):
@@ -90,32 +122,6 @@ describe('move', function()
       when(function()
         move.left(dude, stationary, delta_time)
       end)
-    assert.equal(default_x, dude.x)
-  end)
-
-  it('should align moving object with stationary if they overlap while moving right', function()
-    local stationary = {
-      { x = 17 },
-      { x = 13 }
-    }
-    collision.right:may_be_called_with(dude, stationary[1]):and_will_return(true):
-      and_also(collision.right:may_be_called_with(dude, stationary[2]):and_will_return(false)):
-      when(function()
-        move.right(dude, stationary, delta_time)
-      end)
-    assert.equal(stationary[1].x, dude.x)
-  end)
-
-  it('should align moving object with stationary if they overlap while moving left', function()
-    local stationary = {
-      { x = 17 },
-      { x = 13 }
-    }
-    collision.left:may_be_called_with(dude, stationary[1]):and_will_return(false):
-      and_also(collision.left:may_be_called_with(dude, stationary[2]):and_will_return(true)):
-      when(function()
-        move.left(dude, stationary, delta_time)
-      end)
-    assert.equal(stationary[2].x, dude.x)
+    assert.equal(default_x + default_width, dude.x)
   end)
 end)
