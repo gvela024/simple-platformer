@@ -54,23 +54,23 @@ describe('move', function()
   end)
 
   it('should not move right if colliding with one object', function()
-    local stationary_object = { 'this is a stationary object' }
-    collision.right:should_be_called_with(dude, stationary_object[1]):and_will_return(true):when(function()
-      move.right(dude, stationary_object, delta_time)
+    local stationary = { { x = default_x } }
+    collision.right:should_be_called_with(dude, stationary[1]):and_will_return(true):when(function()
+      move.right(dude, stationary, delta_time)
     end)
     assert.equal(default_x, dude.x)
   end)
 
   it('should not move left if colliding with one object', function()
-    local stationary_object = { 'this is a stationary object' }
-    collision.left:should_be_called_with(dude, stationary_object[1]):and_will_return(true):when(function()
-      move.left(dude, stationary_object, delta_time)
+    local stationary = { { x = default_x } }
+    collision.left:should_be_called_with(dude, stationary[1]):and_will_return(true):when(function()
+      move.left(dude, stationary, delta_time)
     end)
     assert.equal(default_x, dude.x)
   end)
 
   it('should not move right if colliding with one of many objects', function()
-    local stationary = { 'these', 'are', 'some', 'objects' }
+    local stationary = { { x = default_x }, { x = default_x }, { x = default_x }, { x = default_x } }
     collision.right:may_be_called_with(dude, stationary[1]):and_will_return(false):
       and_also(collision.right:may_be_called_with(dude, stationary[2]):and_will_return(true)):
       and_also(collision.right:may_be_called_with(dude, stationary[3]):and_will_return(false)):
@@ -82,7 +82,7 @@ describe('move', function()
   end)
 
   it('should not move left if colliding with one of many objects', function()
-    local stationary = { 'these', 'are', 'some', 'objects' }
+    local stationary = { { x = default_x }, { x = default_x }, { x = default_x }, { x = default_x } }
     collision.left:may_be_called_with(dude, stationary[1]):and_will_return(false):
       and_also(collision.left:may_be_called_with(dude, stationary[2]):and_will_return(false)):
       and_also(collision.left:may_be_called_with(dude, stationary[3]):and_will_return(true)):
@@ -93,15 +93,29 @@ describe('move', function()
     assert.equal(default_x, dude.x)
   end)
 
-  -- it('should align moving object with stationary if they overlap while moving right', function()
-  --   local wall = {
-  --     x = default_x + (delta_time * default_x) - 1,
-  --     y = default_y,
-  --     height = 30,
-  --     width = 5
-  --   }
-  --   dude.x =
-  --   move.right(dude, wall, delta_time)
-  --   assert
-  -- end)
+  it('should align moving object with stationary if they overlap while moving right', function()
+    local stationary = {
+      { x = 17 },
+      { x = 13 }
+    }
+    collision.right:may_be_called_with(dude, stationary[1]):and_will_return(true):
+      and_also(collision.right:may_be_called_with(dude, stationary[2]):and_will_return(false)):
+      when(function()
+        move.right(dude, stationary, delta_time)
+      end)
+    assert.equal(stationary[1].x, dude.x)
+  end)
+
+  it('should align moving object with stationary if they overlap while moving left', function()
+    local stationary = {
+      { x = 17 },
+      { x = 13 }
+    }
+    collision.left:may_be_called_with(dude, stationary[1]):and_will_return(false):
+      and_also(collision.left:may_be_called_with(dude, stationary[2]):and_will_return(true)):
+      when(function()
+        move.left(dude, stationary, delta_time)
+      end)
+    assert.equal(stationary[2].x, dude.x)
+  end)
 end)

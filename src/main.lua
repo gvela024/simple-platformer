@@ -1,16 +1,10 @@
 local Platforms = require 'level.Platforms'
 local MainCharacter = require 'characters.MainCharacter'
 local collision = require 'movement.collision'
+local move = require 'movement.Move'(collision)
 
 local platforms = {}
 local dude = {}
-
-local function colliding_with_anything(stationary, direction, objects)
-  for _, object in pairs(objects) do
-    if direction(stationary, object) then return true end
-  end
-  return false
-end
 
 function love.load()
   platforms = Platforms({
@@ -28,18 +22,13 @@ function love.load()
   })
 end
 
-function love.update(dt)
+function love.update(delta_time)
   if love.keyboard.isDown('d') then
-    print(dt)
-    if not colliding_with_anything(dude, collision.right, platforms) then
-      dude.x = dude.x + dude.speed
-    end
+    move.left(dude, platforms, delta_time)
   end
 
   if love.keyboard.isDown('a') then
-    if not colliding_with_anything(dude, collision.left, platforms) then
-      dude.x = dude.x - dude.speed
-    end
+    move.right(dude, platforms, delta_time)
   end
 end
 
