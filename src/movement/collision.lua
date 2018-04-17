@@ -21,14 +21,14 @@ end
 
 local function right(object1, object2)
   return rightmost_edge(object1) >= leftmost_edge(object2) and
-    not (leftmost_edge(object1) >= rightmost_edge(object2)) and
-    not above_or_below(object1, object2)
+      not (leftmost_edge(object1) >= rightmost_edge(object2)) and
+      not above_or_below(object1, object2)
 end
 
 local function left(object1, object2)
   return leftmost_edge(object1) <= rightmost_edge(object2) and
-  not (rightmost_edge(object1) <= leftmost_edge(object2)) and 
-  not above_or_below(object1, object2)
+    not (rightmost_edge(object1) <= leftmost_edge(object2)) and
+    not above_or_below(object1, object2)
 end
 
 return {

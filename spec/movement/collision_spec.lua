@@ -39,6 +39,20 @@ describe('conllision', function()
     }))
   end)
 
+  it('should collide right if moving is just past stationary', function()
+    assert.truthy(collision.right({
+      x = 5,
+      y = 5,
+      width = 10,
+      height = 10
+    }, {
+      x = 5 + 9,
+      y = 5,
+      width = 10,
+      height = 20
+    }))
+  end)
+
   it('should not collide right if stationary is to the left of moving', function()
     assert.falsy(collision.right({
       x = 125,
@@ -91,6 +105,20 @@ describe('conllision', function()
       x = 0,
       y = 5,
       width = 5,
+      height = 10
+    }))
+  end)
+
+  it('should collied left if moving is just inside stationary', function()
+    assert.truthy(collision.left({
+      x = 5,
+      y = 5,
+      width = 10,
+      height = 10
+    }, {
+      x = 0,
+      y = 5,
+      width = 6,
       height = 10
     }))
   end)
