@@ -23,13 +23,15 @@ function love.load()
 end
 
 function love.update(delta_time)
-  if love.keyboard.isDown('d') then
+  if love.keyboard.isDown('d') and not love.keyboard.isDown('a') then
     move.right(dude, platforms, delta_time)
   end
 
-  if love.keyboard.isDown('a') then
+  if love.keyboard.isDown('a') and not love.keyboard.isDown('d') then
     move.left(dude, platforms, delta_time)
   end
+
+  gravity(dude)
 end
 
 function love.draw()
