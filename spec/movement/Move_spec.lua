@@ -2,17 +2,21 @@ describe('move', function()
   local mach = require 'mach'
   local collision = mach.mock_table({
     right = function() end,
-    left = function() end
+    left = function() end,
+    up = function() end
   }, 'collision')
 
   local move = require 'movement.Move'(collision)
 
   local dude = { }
   local default_x = 5
-  -- local default_y = 12
   local default_speed = 10
-  -- local default_height = 20
   local default_width = 20
+  local default_y = 12
+  local default_y_velocity = 0
+  local default_jump_height = 60
+  local default_gravity = 0
+  local default_height = 20
   local delta_time = 1
 
   before_each(function()
@@ -123,5 +127,9 @@ describe('move', function()
         move.left(dude, stationary, delta_time)
       end)
     assert.equal(default_x + default_width, dude.x)
+  end)
+
+  it('should jump if there are no upward collisions', function()
+
   end)
 end)

@@ -25,6 +25,7 @@ return function(collide)
         moving.x = moving.x + (moving.x * delta_time)
       end
     end,
+
     left = function(moving, stationary, delta_time)
       if there_is_at_least_one(stationary) then
         local colliding, object = in_collision(collide.left, moving, stationary)
@@ -36,6 +37,10 @@ return function(collide)
       else
         moving.x = moving.x - (moving.x * delta_time)
       end
-    end
+    end,
+
+    -- jump = function(moving, stationary, delta_time)
+    --
+    -- end
   }
 end
